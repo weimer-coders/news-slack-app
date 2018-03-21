@@ -9,8 +9,8 @@ news_api_token = os.environ.get('news_api_token')
 slack_bot_token = os.environ.get('slack_bot_token')
 slack_verification_token = os.environ.get('slack_verification_token')
 
-newsapi = NewsApiClient(api_key=credentials.news_api_token)
-sc = SlackClient(credentials.slack_bot_token)
+newsapi = NewsApiClient(api_key=news_api_token)
+sc = SlackClient(slack_bot_token)
 app = Flask(__name__)
 
 
