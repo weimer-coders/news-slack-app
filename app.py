@@ -126,12 +126,6 @@ def slack_button():
     })
 
 
-@app.after_request
-def call_after_request_callbacks(response):
-    print 'This is after the request!!'
-    return response
-
-
 if __name__ == '__main__':
     # Fire up the Flask test server
     app.run(debug=True, use_reloader=True)
