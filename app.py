@@ -5,12 +5,13 @@ from threading import Thread
 import json
 import os
 
-news_api_token = os.environ.get('news_api_token')
-slack_bot_token = os.environ.get('slack_bot_token')
-slack_verification_token = os.environ.get('slack_verification_token')
+NEWS_API_TOKEN = os.environ.get('NEWS_API_TOKEN')
+SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
+SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
-newsapi = NewsApiClient(api_key=news_api_token)
-sc = SlackClient(slack_bot_token)
+newsapi = NewsApiClient(api_key=NEWS_API_TOKEN)
+sc = SlackClient(SLACK_BOT_TOKEN)
+
 app = Flask(__name__)
 
 
@@ -92,7 +93,7 @@ def index():
 
 @app.route('/slack-slash', methods=['POST'])
 def slack_slash():
-    if request.form["token"] != slack_verification_token:
+    if request.form["token"] != SLACK_VERIFICATION_TOKEN:
         return (None, 403, None)
 
     thr = Thread(target=get_the_news, args=[request.form])
@@ -104,7 +105,7 @@ def slack_slash():
 @app.route('/slack-button', methods=['POST'])
 def slack_button():
     payload = json.loads(request.form['payload'])
-    if payload["token"] != slack_verification_token:
+    if payload["token"] != SLACK_VERIFICATION_TOKEN:
         return (None, 403, None)
 
     if payload["actions"][0]["name"] == "share":
@@ -128,4 +129,4 @@ def slack_button():
 
 if __name__ == '__main__':
     # Fire up the Flask test server
-    app.run(debug=True, use_reloader=True)
+    app.run(debug=False, use_reloader=True)
