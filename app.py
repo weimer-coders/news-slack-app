@@ -18,7 +18,7 @@ sc_app = SlackClient(SLACK_APP_TOKEN)
 app = Flask(__name__)
 
 
-def get_the_news(payload):
+def search_news_api(payload):
     """
     Uses the News API to get news stories based on a search query
     """
@@ -147,8 +147,8 @@ def index():
     return ('Working.')
 
 
-@app.route('/slack-slash', methods=['POST'])
-def slack_slash():
+@app.route('/get-news', methods=['POST'])
+def get_news():
     """
     Handles slash command webhooks being sent to this server
     """
@@ -156,14 +156,14 @@ def slack_slash():
         return (None, 403, None)
 
     # Start getting and posting the news in a new thread
-    thr = Thread(target=get_the_news, args=[request.form])
+    thr = Thread(target=search_news_api, args=[request.form])
     thr.start()
 
     return ('', 204)
 
 
-@app.route('/slack-button', methods=['POST'])
-def slack_button():
+@app.route('/interactive-messages', methods=['POST'])
+def interactive_messages():
     """
     Handles interactive message webhooks being sent to this server
     """
@@ -193,5 +193,4 @@ def slack_button():
 
 
 if __name__ == '__main__':
-    # Fire up the Flask test server
     app.run(debug=True, use_reloader=True)
